@@ -18,8 +18,8 @@ import android.bluetooth.BluetoothDevice;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnPaired = (Button)findViewById(R.id.button);
-    ListView devicelist = (ListView)findViewById(R.id.listView);
+    Button btnPaired;
+    ListView devicelist;
 
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnPaired = (Button)findViewById(R.id.button);
+        devicelist = (ListView)findViewById(R.id.listView);
 
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
 
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); // method called when the item is clicked from the list

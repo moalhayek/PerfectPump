@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -48,9 +49,12 @@ public class ledControl extends AppCompatActivity {
         brightness = (SeekBar)findViewById(R.id.seekBar);
         lumn = (TextView)findViewById(R.id.lumn);
 
+        new ConnectBT().execute();
+
         btnOn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Log.d("LISTENER", "turn on led button pressed");
                 turnOnLed();    //method to turn on
             }
 
@@ -126,11 +130,14 @@ public class ledControl extends AppCompatActivity {
 
     private void turnOnLed()
     {
+        Log.d("BUTTON", "turn on led button pressed");
         if (btSocket!=null)
         {
+            Log.d("IF", "in the if statement");
             try
             {
                 btSocket.getOutputStream().write("TO".toString().getBytes());
+                Log.d("BT", "sent to output stream");
             }
             catch (IOException e)
             {
