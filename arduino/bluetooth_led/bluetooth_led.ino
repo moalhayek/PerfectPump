@@ -1,4 +1,4 @@
-cjar command;
+char command;
 String string;
 boolean ledon = false;
 #define led 5
@@ -12,9 +12,10 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   if (Serial.available()>0){
+    Serial.println("There is info available");
     string = "";
   }
-  while(Serial.availble()>0{
+  while(Serial.available()>0){
     command = ((byte)Serial.read());
     if(command==":"){
       break;
@@ -26,6 +27,7 @@ void loop() {
   }
 
   if(string == "TO"){
+    Serial.println("I'm turned on");
     ledOn();
     ledon = true;
   }
