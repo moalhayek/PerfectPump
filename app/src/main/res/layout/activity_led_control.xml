@@ -85,4 +85,24 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/sens"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/brightness"
+        android:layout_marginTop="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="Sensor Value: ????"/>
+
+    <TextView
+        android:id="@+id/txtString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sens"
+        android:layout_marginTop="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text=""/>
 </RelativeLayout>
