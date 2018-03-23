@@ -1,7 +1,7 @@
 char command;
 String string;
 boolean ledon = false;
-#define led 5
+#define led 13
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -17,7 +17,7 @@ void loop() {
   }
   while(Serial.available()>0){
     command = ((byte)Serial.read());
-    if(command==":"){
+    if(command==':'){
       break;
     }else{
       string += command;
