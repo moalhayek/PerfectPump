@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         lineChart = (LineChart) findViewById(R.id.line_chart);
         float yValues [] = {10,20,30,0,40,60};
-        String xvalues [] = {"first","second","third","fourth","fifth","sixth"};
+        String xValues [] = {"first","second","third","fourth","fifth","sixth"};
+        drawLineChart(yValues, xValues);
 
         if(myBluetooth == null){
             // display no bluetooth adapter message here
