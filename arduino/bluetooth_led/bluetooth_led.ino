@@ -12,7 +12,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-<<<<<<< HEAD
+
   sendAndroidValues();
   //when serial values have been received this will be true
   if (Serial.available() > 0)
@@ -21,24 +21,14 @@ void loop() {
     if (inbyte == '0')
     {
       //LED off
-      digitalWrite(led, LOW);
+      ledOff();
+      //digitalWrite(led, LOW);
     }
     if (inbyte == '1')
     {
       //LED on
-      digitalWrite(led, HIGH);
-=======
-  if (Serial.available()>0){
-    Serial.println("There is info available");
-    string = "";
-  }
-  while(Serial.available()>0){
-    command = ((byte)Serial.read());
-    if(command==':'){
-      break;
-    }else{
-      string += command;
->>>>>>> c3092935c8b0ab3e5ab5fa18cba637cbaaaec55a
+      //digitalWrite(led, HIGH);
+      ledOn();
     }
   }
   //delay by 2s. Meaning we will be sent values every 2s approx
@@ -78,7 +68,6 @@ void loop() {
 //    }
 //  }
 
-  delay(2000);
 }
 
 void ledOn(){

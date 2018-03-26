@@ -18,6 +18,7 @@ import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import android.os.Handler;
 import java.io.InputStream;
@@ -42,6 +43,8 @@ public class ledControl extends AppCompatActivity {
     final int handlerState = 0;                        //used to identify handler message
     private StringBuilder recDataString = new StringBuilder();
     private ConnectedThread mConnectedThread;
+
+    ArrayList<Integer> sensorVals = new ArrayList<Integer>();
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -79,6 +82,7 @@ public class ledControl extends AppCompatActivity {
                             String sensor0 = recDataString.substring(1, 4);             //get sensor value from string between indices 1-5
 
                             sensor.setText("Sensor Value: " + sensor0);    //update the textviews with sensor values
+                            sensorVals.add(Integer.parseInt(sensor0));
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                         dataInPrint = "";
