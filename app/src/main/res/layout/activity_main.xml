@@ -34,4 +34,9 @@
         android:layout_above="@+id/button"
         android:layout_below="@+id/textView" />
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/Line_Chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
+
 </RelativeLayout>

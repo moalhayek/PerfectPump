@@ -3,10 +3,12 @@ package com.capstone.perfectpump;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.security.KeyStore;
 import java.util.Map;
 import java.util.Set;
@@ -25,9 +27,11 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     Button btnPaired;
     ListView devicelist;
@@ -46,10 +50,8 @@ public class MainActivity extends AppCompatActivity {
         devicelist = (ListView)findViewById(R.id.listView);
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
-        lineChart = (LineChart) findViewById(R.id.line_chart);
-        float yValues [] = {10,20,30,0,40,60};
-        String xValues [] = {"first","second","third","fourth","fifth","sixth"};
-        drawLineChart(yValues, xValues);
+        lineChart = (LineChart)findViewById(R.id.Line_Chart);
+        drawLineChart();
 
         if(myBluetooth == null){
             // display no bluetooth adapter message here
@@ -95,26 +97,36 @@ public class MainActivity extends AppCompatActivity {
         devicelist.setOnItemClickListener(myListClickListener); // method called when the item is clicked from the list
     }
 
-    private void drawLineChart(float[] yValues, String[] xValues){
+    private void drawLineChart(){
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+
         Description desc = new Description();
         desc.setText("Test Line Chart");
+        Log.d("DESC", desc.getText());
         lineChart.setDescription(desc);
-        ArrayList<Entry> yData = new ArrayList<>();
-        for (int i = 0; i < yValues.length; i++){
-            yData.add(new Entry(yValues[i],i));
-        }
-        ArrayList<String> xData = new ArrayList<>();
-        for (int i = 0; i < xValues.length; i++){
-            xData.add(xValues[i]);
-        }
-        LineDataSet lineDataSet = new LineDataSet(yData, "Test Line Chart");
-        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
-        LineData lineData = new LineData((ILineDataSet)xData, lineDataSet);
-        lineData.setValueTextSize(13f);
-        lineData.setValueTextColor(Color.BLACK);
+        ArrayList<Entry> yValues = new ArrayList<>();
+        yValues.add(new Entry(0, 60f));
+        yValues.add(new Entry(1, 50f));
+        yValues.add(new Entry(2, 70f));
+        yValues.add(new Entry(3, 30f));
+        yValues.add(new Entry(4, 50f));
+        yValues.add(new Entry(5, 60f));
+        yValues.add(new Entry(6, 65f));
 
-        lineChart.setData(lineData);
+        LineDataSet set1 = new LineDataSet(yValues, "Data Set 1");
+        set1.setFillAlpha(110);
+        set1.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(dataSets);
+        data.setValueTextSize(13f);
+        data.setValueTextColor(Color.BLACK);
+
+        lineChart.setData(data);
         lineChart.invalidate();
     }
 

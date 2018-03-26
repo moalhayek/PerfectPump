@@ -17,11 +17,11 @@
                 android:padding="3dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="21sp"
-                android:text="Line Chart"
+                android:text="Test Line Chart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/line_chart"
+                android:id="@+id/Line_Chart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
 
