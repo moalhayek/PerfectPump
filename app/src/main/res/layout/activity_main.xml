@@ -34,6 +34,4 @@
         android:layout_above="@+id/button"
         android:layout_below="@+id/textView" />
 
-
-
 </RelativeLayout>

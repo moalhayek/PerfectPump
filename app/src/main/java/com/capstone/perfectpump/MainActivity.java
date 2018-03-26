@@ -1,11 +1,14 @@
 package com.capstone.perfectpump;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.security.KeyStore;
+import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
 import android.widget.Toast;
@@ -16,6 +19,14 @@ import android.content.Intent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnPaired;
@@ -23,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
+    private LineChart lineChart;
     public static String EXTRA_ADDRESS = "device_address";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         btnPaired = (Button)findViewById(R.id.button);
         devicelist = (ListView)findViewById(R.id.listView);
-
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
+
+        lineChart = (LineChart) findViewById(R.id.line_chart);
+        float yValues [] = {10,20,30,0,40,60};
+        String xvalues [] = {"first","second","third","fourth","fifth","sixth"};
 
         if(myBluetooth == null){
             // display no bluetooth adapter message here
@@ -79,6 +92,29 @@ public class MainActivity extends AppCompatActivity {
 
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); // method called when the item is clicked from the list
+    }
+
+    private void drawLineChart(float[] yValues, String[] xValues){
+        Description desc = new Description();
+        desc.setText("Test Line Chart");
+        lineChart.setDescription(desc);
+        ArrayList<Entry> yData = new ArrayList<>();
+        for (int i = 0; i < yValues.length; i++){
+            yData.add(new Entry(yValues[i],i));
+        }
+        ArrayList<String> xData = new ArrayList<>();
+        for (int i = 0; i < xValues.length; i++){
+            xData.add(xValues[i]);
+        }
+        LineDataSet lineDataSet = new LineDataSet(yData, "Test Line Chart");
+        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        LineData lineData = new LineData((ILineDataSet)xData, lineDataSet);
+        lineData.setValueTextSize(13f);
+        lineData.setValueTextColor(Color.BLACK);
+
+        lineChart.setData(lineData);
+        lineChart.invalidate();
     }
 
     private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener()
