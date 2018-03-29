@@ -2,6 +2,7 @@
 //String string;
 char inbyte = 0;
 boolean ledon = false;
+int x = 1000;
 #define led 13
 void setup() {
   // put your setup code here, to run once:
@@ -14,6 +15,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   sendAndroidValues();
+  x++;
   //when serial values have been received this will be true
   if (Serial.available() > 0)
   {
@@ -83,7 +85,6 @@ void ledOff(){
 //sends the values from the sensor over serial to BT module
 void sendAndroidValues()
  {
-  int x = random(1000,2000);
   //puts # before the values so our app knows what to do with the data
   Serial.print('#');
   //for loop cycles through 4 sensors and sends values via serial

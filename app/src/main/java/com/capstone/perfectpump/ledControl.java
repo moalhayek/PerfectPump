@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import android.os.Handler;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ import java.io.OutputStream;
 
 public class ledControl extends AppCompatActivity {
 
-    Button btnOn, btnOff, btnDis;
+    Button btnOn, btnOff, btnDis, start, stop, save;
     SeekBar brightness;
     TextView lumn;
     String address = null;
@@ -45,6 +46,7 @@ public class ledControl extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
 
     ArrayList<Integer> sensorVals = new ArrayList<Integer>();
+    boolean isSet = false;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -62,6 +64,9 @@ public class ledControl extends AppCompatActivity {
         btnOn = (Button)findViewById(R.id.turnOn);
         btnOff = (Button)findViewById(R.id.turnOff);
         btnDis = (Button)findViewById(R.id.disconnect);
+        start = (Button)findViewById(R.id.start);
+        stop = (Button)findViewById(R.id.stop);
+        save = (Button)findViewById(R.id.save);
         brightness = (SeekBar)findViewById(R.id.seekBar);
         lumn = (TextView)findViewById(R.id.lumn);
         sensor = (TextView)findViewById(R.id.sens);
@@ -79,10 +84,10 @@ public class ledControl extends AppCompatActivity {
 
                         if (recDataString.charAt(0) == '#')                             //if it starts with # we know it is what we are looking for
                         {
-                            String sensor0 = recDataString.substring(1, 4);             //get sensor value from string between indices 1-5
+                            String sensor0 = recDataString.substring(1, 5);             //get sensor value from string between indices 1-5
 
                             sensor.setText("Sensor Value: " + sensor0);    //update the textviews with sensor values
-                            sensorVals.add(Integer.parseInt(sensor0));
+                            sensorVals.add(Integer.parseInt(sensor0));      // add the integer to the array
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                         dataInPrint = "";
@@ -121,6 +126,28 @@ public class ledControl extends AppCompatActivity {
                 Disconnect(); //close connection
             }
         });
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSet();
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopSet();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveSet();
+            }
+        });
+
 
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -194,6 +221,23 @@ public class ledControl extends AppCompatActivity {
 
         mConnectedThread.write("1");
         msg("Turn on LED");
+    }
+
+    private void startSet(){
+        isSet = true;
+        sensorVals.clear();
+        msg("Set Started");
+    }
+
+    private void stopSet(){
+        isSet = false;
+        msg("Set Stopped");
+        System.out.println(Arrays.toString(sensorVals.toArray()));
+    }
+
+    private void saveSet(){
+        // add storage method here, maybe send to graphs here as well
+        msg("Set Saved");
     }
 
     @Override
@@ -289,14 +333,18 @@ public class ledControl extends AppCompatActivity {
 
             // Keep looping to listen for received messages
             while (true) {
-                try {
-                    bytes = mmInStream.read(buffer);            //read bytes from input buffer
-                    String readMessage = new String(buffer, 0, bytes);
-                    // Send the obtained bytes to the UI Activity via handler
-                    bluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
-                } catch (IOException e) {
-                    break;
+                // if in the middle of a set, read received messages and send them to handler
+                if (isSet){
+                    try {
+                        bytes = mmInStream.read(buffer);            //read bytes from input buffer
+                        String readMessage = new String(buffer, 0, bytes);
+                        // Send the obtained bytes to the UI Activity via handler
+                        bluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
+                    } catch (IOException e) {
+                        break;
+                    }
                 }
+
             }
         }
         //write method
