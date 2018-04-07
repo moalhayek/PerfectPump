@@ -4,16 +4,20 @@ char inbyte = 0;
 boolean ledon = false;
 int x = 1000;
 #define led 13
+const int analogInModified = A0;
+int sensorModifiedValue = 0;
+int secondPower = 9;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(led,OUTPUT);
+  pinMode(secondPower,OUTPUT);
   
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  digitalWrite(secondPower,HIGH);
   sendAndroidValues();
   x++;
   //when serial values have been received this will be true
@@ -88,8 +92,8 @@ void sendAndroidValues()
   //puts # before the values so our app knows what to do with the data
   Serial.print('#');
   //for loop cycles through 4 sensors and sends values via serial
-
-  Serial.print(x);
+  sensorModifiedValue = analogRead(analogInModified);
+  Serial.print(sensorModifiedValue);
   //technically not needed but I prefer to break up data values
   //so they are easier to see when debugging
   
